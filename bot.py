@@ -3,8 +3,8 @@ import os
 import random
 from aiogram import Bot, Dispatcher, types
 from aiogram.types import ReplyKeyboardMarkup, KeyboardButton
-from aiogram.webhook.aiohttp_server import WebhookRequestHandler
 from aiohttp import web
+from aiogram.utils.executor import start_webhook
 
 API_TOKEN = os.getenv("API_TOKEN")
 WEBHOOK_HOST = os.getenv("WEBHOOK_HOST")  # например: https://challenge-bot.onrender.com
@@ -45,7 +45,7 @@ async def on_startup(app):
 async def on_shutdown(app):
     await bot.delete_webhook()
 
-# Создаём вебхук для aiohttp
+# Обработчик webhook
 async def handle_webhook(request):
     json_str = await request.json()
     update = types.Update(**json_str)
@@ -59,6 +59,6 @@ app.on_startup.append(on_startup)
 app.on_shutdown.append(on_shutdown)
 
 # Для Render: запуск сервера
-if name == '__main__':
+if __name__ == '__main__':
     port = int(os.environ.get('PORT', 8000))
     web.run_app(app, host='0.0.0.0', port=port)
