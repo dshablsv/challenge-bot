@@ -36,5 +36,5 @@ async def send_challenge(message: types.Message):
     challenge = random.choice(challenges)
     await message.answer(f"Твой челлендж на сегодня:\n\n*{challenge}*", parse_mode="Markdown")
 
-if name == '__main__':
+if __name__ == '__main__':
     executor.start_polling(dp)
