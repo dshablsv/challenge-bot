@@ -1,9 +1,10 @@
 import os
 import random
-from aiogram import Bot, Dispatcher, types
+from aiogram import Bot, types
 from aiogram.types import ReplyKeyboardMarkup, KeyboardButton
 from aiohttp import web
 from aiogram.webhook.aiohttp_server import setup_application
+from aiogram.dispatcher import Dispatcher
 
 # Проверка переменных окружения
 API_TOKEN = os.getenv("API_TOKEN")
@@ -17,8 +18,8 @@ WEBHOOK_URL = f"{WEBHOOK_HOST}{WEBHOOK_PATH}"
 
 bot = Bot(token=API_TOKEN)
 
-# Для aiogram 3.x нужно использовать класс Dispatcher напрямую и передавать объект бота в конструктор
-dp = Dispatcher(bot)  # Это правильный способ для aiogram 3.x
+# Инициализация диспетчера для aiogram 3.x
+dp = Dispatcher(bot)
 
 # Список челленджей
 challenges = [
