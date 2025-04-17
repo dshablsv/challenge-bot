@@ -1,10 +1,9 @@
-
 import os
 import random
 from aiogram import Bot, Dispatcher, types
 from aiogram.types import ReplyKeyboardMarkup, KeyboardButton
 from aiohttp import web
-from aiogram.utils.executor import start_webhook
+from aiogram.webhook.aiohttp_server import setup_application
 
 API_TOKEN = os.getenv("API_TOKEN")
 WEBHOOK_HOST = os.getenv("WEBHOOK_HOST")  # например: https://challenge-bot.onrender.com
@@ -57,6 +56,9 @@ app.add_routes([web.post(f'/{API_TOKEN}', handle_webhook)])
 
 app.on_startup.append(on_startup)
 app.on_shutdown.append(on_shutdown)
+
+# Настройка webhook с помощью aiogram 3.x
+setup_application(dp, app)
 
 # Для Render: запуск сервера
 if __name__ == '__main__':
