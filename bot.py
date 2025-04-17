@@ -16,7 +16,9 @@ WEBHOOK_PATH = f"/webhook/{API_TOKEN}"
 WEBHOOK_URL = f"{WEBHOOK_HOST}{WEBHOOK_PATH}"
 
 bot = Bot(token=API_TOKEN)
-dp = Dispatcher.from_connection(bot)  # Исправление
+
+# Для aiogram 3.x нужно использовать класс Dispatcher напрямую и передавать объект бота в конструктор
+dp = Dispatcher(bot)  # Это правильный способ для aiogram 3.x
 
 # Список челленджей
 challenges = [
