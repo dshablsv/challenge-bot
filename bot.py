@@ -3,7 +3,7 @@ import os
 import random
 from aiogram import Bot, Dispatcher, types
 from aiogram.types import ReplyKeyboardMarkup, KeyboardButton
-from aiogram.dispatcher.webhook import get_new_configured_app
+from aiogram.webhook.aiohttp_server import WebhookRequestHandler
 from aiohttp import web
 
 API_TOKEN = os.getenv("API_TOKEN")
@@ -45,7 +45,16 @@ async def on_startup(app):
 async def on_shutdown(app):
     await bot.delete_webhook()
 
-app = get_new_configured_app(dispatcher=dp, path=WEBHOOK_PATH)
+# Создаём вебхук для aiohttp
+async def handle_webhook(request):
+    json_str = await request.json()
+    update = types.Update(**json_str)
+    await dp.process_update(update)
+    return web.Response()
+
+app = web.Application()
+app.add_routes([web.post(f'/{API_TOKEN}', handle_webhook)])
+
 app.on_startup.append(on_startup)
 app.on_shutdown.append(on_shutdown)
 
