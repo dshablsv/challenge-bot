@@ -3,8 +3,9 @@ import random
 from aiogram import Bot, types
 from aiogram.types import ReplyKeyboardMarkup, KeyboardButton
 from aiohttp import web
-from aiogram.webhook.aiohttp_server import setup_application
+from aiogram.fsm.storage.memory import MemoryStorage
 from aiogram.dispatcher import Dispatcher
+from aiogram.webhook.aiohttp_server import setup_application
 
 # Проверка переменных окружения
 API_TOKEN = os.getenv("API_TOKEN")
@@ -18,8 +19,9 @@ WEBHOOK_URL = f"{WEBHOOK_HOST}{WEBHOOK_PATH}"
 
 bot = Bot(token=API_TOKEN)
 
-# Инициализация диспетчера для aiogram 3.x
-dp = Dispatcher(bot)
+# Инициализация диспетчера для aiogram 3.x (с использованием MemoryStorage)
+storage = MemoryStorage()
+dp = Dispatcher(bot, storage=storage)
 
 # Список челленджей
 challenges = [
